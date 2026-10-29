@@ -30,9 +30,10 @@ Siparişler `data/orders.json` dosyasına kaydedilir.
 
 ## Ürün eklemek / düzenlemek
 
-Tüm ürünler `public/js/products.js` dosyasında. Ürün fotoğraflarını `public/assets/products/` klasörüne koyup
-`images` listesine yazın: ilk görsel kartta, ikincisi fare üzerine gelince gösterilir. Kargo ücreti ve ücretsiz kargo
-sınırı aynı dosyanın sonundaki `FRENA_CONFIG` içinde.
+Tüm ürünler `public/js/products.js` dosyasında. Şu anki 7 model Trendyol mağazasından alındı.
+Her model tek ürün olarak duruyor; renkleri `colors` altında, her rengin kendi fotoğrafları ve Trendyol linkiyle.
+Fotoğraflar `public/assets/products/` klasöründe (900×1350 px). Beden tabloları da aynı dosyada (`SIZE_CHARTS`).
+Kargo ücreti ve ücretsiz kargo sınırı dosyanın sonundaki `FRENA_CONFIG` içinde.
 
 ## Yapı
 

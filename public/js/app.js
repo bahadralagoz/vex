@@ -1,5 +1,5 @@
 (() => {
-  const { PRODUCTS, CONFIG, fmt, byId, visual } = window.FrenaShop;
+  const { PRODUCTS, CONFIG, fmt, byId, visual, imagesOf } = window.FrenaShop;
   const CATEGORIES = window.FRENA_CATEGORIES;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -33,13 +33,13 @@
       const tag = p.oldPrice
         ? `<span class="card__tag card__tag--sale">%${Math.round((1 - p.price / p.oldPrice) * 100)} indirim</span>`
         : p.tag ? `<span class="card__tag">${p.tag}</span>` : "";
-      return `<article class="card" data-id="${p.id}">
-        <div class="card__media">${tag}${visual(p)}
+      return `<article class="card" data-id="${p.id}" data-color="0">
+        <div class="card__media">${tag}<div class="card__img">${visual(p, p.colors[0])}</div>
           <div class="card__quick">${p.sizes.map(s => `<button data-size="${s}" aria-label="${s} beden sepete ekle">${s}</button>`).join("")}</div>
         </div>
         <div class="card__info">
           <div><h3 class="card__name">${p.name}</h3>
-            <div class="card__dots">${p.colors.map(c => `<span style="background:${c.hex}" title="${c.name}"></span>`).join("")}</div></div>
+            <div class="card__dots">${p.colors.map((c, i) => `<button data-dot="${i}" class="${i ? "" : "active"}" style="background:${c.hex}" title="${c.name}" aria-label="${c.name}"></button>`).join("")}</div></div>
           <p class="card__price">${p.oldPrice ? `<s>${fmt(p.oldPrice)}</s>` : ""}${fmt(p.price)}</p>
         </div></article>`;
     }).join("");
@@ -50,10 +50,18 @@
   $("#productGrid").addEventListener("click", e => {
     const card = e.target.closest(".card");
     if (!card) return;
-    const p = PRODUCTS.find(x => x.id === card.dataset.id);
+    const p = byId(card.dataset.id);
+    const color = p.colors[+card.dataset.color];
+    const dot = e.target.closest("[data-dot]");
+    if (dot) {
+      card.dataset.color = dot.dataset.dot;
+      card.querySelectorAll("[data-dot]").forEach(d => d.classList.toggle("active", d === dot));
+      card.querySelector(".card__img").innerHTML = visual(p, p.colors[+dot.dataset.dot]);
+      return;
+    }
     const sizeBtn = e.target.closest("[data-size]");
-    if (sizeBtn) { addToCart(p, p.colors[0], sizeBtn.dataset.size); return; }
-    openQuick(p);
+    if (sizeBtn) { addToCart(p, color, sizeBtn.dataset.size); return; }
+    openQuick(p, color);
   });
 
   // ---------- özel imleç ----------
@@ -62,7 +70,8 @@
     addEventListener("mousemove", e => { cursor.style.left = e.clientX + "px"; cursor.style.top = e.clientY + "px"; });
     $("#productGrid").addEventListener("mouseover", e => {
       const overQuick = e.target.closest(".card__quick");
-      cursor.classList.toggle("show", !!e.target.closest(".card") && !overQuick);
+      const overDot = e.target.closest(".card__dots");
+      cursor.classList.toggle("show", !!e.target.closest(".card") && !overQuick && !overDot);
     });
     $("#productGrid").addEventListener("mouseleave", () => cursor.classList.remove("show"));
   }
@@ -85,8 +94,8 @@
 
   // ---------- hızlı bakış ----------
   let current = null, selColor = null, selSize = null, selImg = 0;
-  function openQuick(p) {
-    current = p; selColor = p.colors[0]; selSize = null; selImg = 0;
+  function openQuick(p, color) {
+    current = p; selColor = color || p.colors[0]; selSize = null; selImg = 0;
     $("#quickCat").textContent = catLabel(p.category);
     $("#quickName").textContent = p.name;
     $("#quickPrice").innerHTML = fmt(p.price) + (p.oldPrice ? `<s>${fmt(p.oldPrice)}</s>` : "");
@@ -97,10 +106,14 @@
   }
   function renderQuickOptions() {
     const p = current;
-    const imgs = p.images || [];
+    const imgs = imagesOf(p, selColor);
     $("#quickMedia").innerHTML = visual(p, selColor, { alt: false, index: selImg }) + (imgs.length > 1
       ? `<div class="quick__thumbs">${imgs.map((src, i) => `<button data-img="${i}" class="${i === selImg ? "active" : ""}" aria-label="Görsel ${i + 1}"><img src="${src}" alt=""></button>`).join("")}</div>` : "");
     $("#quickColorName").textContent = selColor.name;
+    $("#quickChart").innerHTML = p.sizeChart
+      ? `<details><summary>Beden tablosu (cm)</summary><div class="chart-wrap"><table><thead><tr>${p.sizeChart.cols.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${p.sizeChart.rows.map(r => `<tr>${r.map((v, i) => i ? `<td>${v}</td>` : `<th>${v}</th>`).join("")}</tr>`).join("")}</tbody></table></div><p>Ölçüler yaklaşık değerlerdir.</p></details>`
+      : "";
+    $("#quickTrendyol").href = selColor.trendyol || CONFIG.trendyolStore;
     $("#quickColors").innerHTML = p.colors.map((c, i) =>
       `<button class="swatch${c === selColor ? " active" : ""}" data-i="${i}" style="background:${c.hex}" aria-label="${c.name}"></button>`).join("");
     $("#quickSizes").innerHTML = p.sizes.map(s =>
@@ -114,7 +127,7 @@
   });
   $("#quickColors").addEventListener("click", e => {
     const b = e.target.closest(".swatch"); if (!b) return;
-    selColor = current.colors[+b.dataset.i]; renderQuickOptions();
+    selColor = current.colors[+b.dataset.i]; selImg = 0; renderQuickOptions();
   });
   $("#quickSizes").addEventListener("click", e => {
     const b = e.target.closest(".size"); if (!b) return;
@@ -180,6 +193,13 @@
     const t = $("#toast"); t.textContent = text; t.classList.add("show");
     clearTimeout(tt); tt = setTimeout(() => t.classList.remove("show"), 2400);
   }
+
+  // ---------- lookbook → ürün ----------
+  $("#lookTrack").addEventListener("click", e => {
+    const b = e.target.closest("[data-look]"); if (!b) return;
+    const p = byId(b.dataset.look);
+    if (p) openQuick(p, p.colors[+b.dataset.color] || p.colors[0]);
+  });
 
   // ---------- nav & mobil menü ----------
   const nav = $("#nav");
