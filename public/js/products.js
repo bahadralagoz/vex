@@ -1,6 +1,7 @@
 // FRENA ürün kataloğu
 // Yeni ürün eklemek için bu listeye bir nesne ekleyin.
-// image: "assets/products/dosya-adi.jpg" (boş bırakılırsa renkli bir yer tutucu gösterilir)
+// images: ["assets/products/dosya-1.jpg", "assets/products/dosya-2.jpg"]
+//   ilk görsel kartta, ikincisi üzerine gelince gösterilir (boşsa yer tutucu çizilir)
 // trendyol: ürünün Trendyol linki (isteğe bağlı)
 window.FRENA_PRODUCTS = [
   {
@@ -13,8 +14,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Şampanya", hex: "#e8d5b5" }, { name: "Gece", hex: "#1d1f2b" }],
     sizes: ["XS", "S", "M", "L"],
     description: "Akışkan saten kumaş, verev kesim ve ince askılarıyla gün batımından gece yarısına uzanan bir siluet.",
-    image: "",
-    tone: ["#e8d5b5", "#b98e5a"]
+    images: [],
+    tone: ["#e7d8c6", "#a8876a"]
   },
   {
     id: "f002",
@@ -25,8 +26,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Kum", hex: "#cdbb9c" }, { name: "Siyah", hex: "#141414" }],
     sizes: ["S", "M", "L", "XL"],
     description: "Geniş omuz, düşük düğme hattı ve astarlı iç yapı. Hem takım hem tek parça olarak kombinlenir.",
-    image: "",
-    tone: ["#cdbb9c", "#6f5f45"]
+    images: [],
+    tone: ["#d3c3b0", "#6d5643"]
   },
   {
     id: "f003",
@@ -36,8 +37,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Ekru", hex: "#efe9dc" }, { name: "Kiremit", hex: "#b4532a" }],
     sizes: ["XS", "S", "M", "L"],
     description: "Yumuşak dokulu ince triko, kayık yaka ve hafif balon kol detayı.",
-    image: "",
-    tone: ["#efe9dc", "#c9b8a0"]
+    images: [],
+    tone: ["#f1e9de", "#c4b4a4"]
   },
   {
     id: "f004",
@@ -48,8 +49,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Taş", hex: "#a39d92" }, { name: "Lacivert", hex: "#22304a" }],
     sizes: ["34", "36", "38", "40", "42"],
     description: "Pileli ön, geniş paça ve yüksek bel. Bacak boyunu uzatan ütü izi detayı.",
-    image: "",
-    tone: ["#a39d92", "#4d4a44"]
+    images: [],
+    tone: ["#b8ab9c", "#5a4a3e"]
   },
   {
     id: "f005",
@@ -59,8 +60,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Beyaz", hex: "#f7f5f0" }, { name: "Adaçayı", hex: "#9aa58c" }],
     sizes: ["S", "M", "L"],
     description: "Nefes alan keten karışımı, rahat kesim ve sedef düğmeler.",
-    image: "",
-    tone: ["#dfe3d6", "#9aa58c"]
+    images: [],
+    tone: ["#e3e0d2", "#9c9a80"]
   },
   {
     id: "f006",
@@ -71,8 +72,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Bordo", hex: "#5e1f2b" }, { name: "Kahve", hex: "#5a3d2b" }],
     sizes: ["XS", "S", "M", "L"],
     description: "Dökümlü midi boy, arkada gizli fermuar ve yürürken hareket eden pliseler.",
-    image: "",
-    tone: ["#8c3a48", "#3c121b"]
+    images: [],
+    tone: ["#8f6a55", "#3a261c"]
   },
   {
     id: "f007",
@@ -82,8 +83,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Zeytin", hex: "#5d5f3a" }],
     sizes: ["S", "M", "L", "XL"],
     description: "Belden bağlamalı kruvaze yaka, her vücut tipine uyum sağlayan ayarlanabilir siluet.",
-    image: "",
-    tone: ["#8a8c5c", "#3f4126"]
+    images: [],
+    tone: ["#a39a78", "#4f4a34"]
   },
   {
     id: "f008",
@@ -94,8 +95,8 @@ window.FRENA_PRODUCTS = [
     colors: [{ name: "Bej", hex: "#c8ad85" }],
     sizes: ["S", "M", "L"],
     description: "Su itici gabardin, apoletli omuz ve kemer. Mevsimler arası vazgeçilmez.",
-    image: "",
-    tone: ["#d8bf98", "#8e6c43"]
+    images: [],
+    tone: ["#d6c0a2", "#7e6047"]
   }
 ];
 
@@ -107,10 +108,10 @@ window.FRENA_CATEGORIES = [
   { id: "ceket", label: "Ceket & Dış Giyim" }
 ];
 
-// Sipariş bilgileri — kendi bilgilerinizle değiştirin
+// Mağaza ayarları (sunucu da kargo ücretini buradan okur)
 window.FRENA_CONFIG = {
-  whatsapp: "905000000000", // başında + olmadan, ülke kodu ile
   trendyolStore: "https://www.trendyol.com/sr?mid=261651&os=1",
-  instagram: "https://instagram.com/",
-  freeShippingLimit: 1500
+  instagram: "https://www.instagram.com/frenaofficialtr/",
+  freeShippingLimit: 1500,
+  shippingFee: 89
 };

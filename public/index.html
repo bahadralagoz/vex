@@ -7,8 +7,9 @@
   <meta name="description" content="FRENA kadın giyim. Hızlı dünyada yavaşlamak için tasarlanmış, özenle üretilmiş parçalar.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/mark-dark.png">
 </head>
 <body>
   <div class="announce">
@@ -29,7 +30,7 @@
       <a href="#manifesto">Hikaye</a>
       <a href="#lookbook">Lookbook</a>
     </nav>
-    <a href="#top" class="nav__logo" aria-label="FRENA ana sayfa">FRENA</a>
+    <a href="#top" class="nav__logo" aria-label="FRENA ana sayfa"><img class="mark" src="assets/mark-dark.png" alt=""><img class="word" src="assets/wordmark-dark.png" alt="Frena"></a>
     <div class="nav__actions">
       <a href="#" class="nav__ext" id="trendyolLink" target="_blank" rel="noopener">Trendyol'da</a>
       <button class="nav__cart" id="cartBtn" aria-label="Sepet">
@@ -48,30 +49,39 @@
   <main id="top">
     <!-- HERO -->
     <section class="hero">
-      <div class="hero__light" aria-hidden="true"></div>
-      <p class="hero__eyebrow reveal">Sonbahar / Kış — 26</p>
-      <h1 class="hero__title">
-        <span class="line"><span class="reveal-up">Hızlı</span> <em class="reveal-up d1">dünyada,</em></span>
-        <span class="line"><span class="reveal-up d2">fren</span><span class="hero__a reveal-up d2">a</span><span class="hero__dot reveal-up d2">.</span></span>
-      </h1>
-      <div class="hero__bottom">
+      <div class="hero__copy">
+        <p class="eyebrow reveal">Sonbahar / Kış — 2026</p>
+        <h1 class="hero__title">
+          <span class="line"><span class="reveal-up">Hızlı dünyada,</span></span>
+          <span class="line"><em class="reveal-up d2">frena.</em></span>
+        </h1>
         <p class="hero__lead reveal d3">Mevsimlik trendlerin değil, yıllarca giyeceğin parçaların peşindeyiz. Sınırlı adetlerle, özenle üretilen kadın giyim.</p>
-        <a href="#koleksiyon" class="btn btn--dark reveal d3">Koleksiyonu keşfet <span class="btn__arrow">→</span></a>
+        <div class="hero__ctas reveal d3">
+          <a href="#koleksiyon" class="btn btn--dark">Koleksiyonu keşfet <span class="btn__arrow">→</span></a>
+          <a href="#manifesto" class="btn btn--ghost">Hikayemiz</a>
+        </div>
       </div>
-      <div class="badge" aria-hidden="true">
-        <svg viewBox="0 0 200 200">
-          <defs><path id="circle" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
-          <text><textPath href="#circle">yavaşla • hisset • giy • yavaşla • hisset • giy •</textPath></text>
+      <div class="hero__arch" id="heroArch">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <defs><path id="circle" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
+            <text><textPath href="#circle">yavaşla • hisset • giy • yavaşla • hisset • giy •</textPath></text>
+          </svg>
+        </div>
+        <svg class="hero__mark" viewBox="80 0 450 510" aria-hidden="true">
+          <ellipse class="p1" cx="305" cy="252" rx="98" ry="244"/>
+          <path class="p2" d="M97 263 C 170 205, 360 180, 512 262"/>
+          <path class="p3" d="M512 262 C 440 335, 300 345, 212 224"/>
         </svg>
-        <span class="badge__center">F</span>
+        <img class="hero__word" src="assets/wordmark-light.png" alt="">
       </div>
     </section>
 
     <!-- MARQUEE -->
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
-        <span>Elbise</span><i>✦</i><span>Blazer</span><i>✦</i><span>Triko</span><i>✦</i><span>Pantolon</span><i>✦</i><span>Etek</span><i>✦</i><span>Trençkot</span><i>✦</i>
-        <span>Elbise</span><i>✦</i><span>Blazer</span><i>✦</i><span>Triko</span><i>✦</i><span>Pantolon</span><i>✦</i><span>Etek</span><i>✦</i><span>Trençkot</span><i>✦</i>
+        <span>Elbise</span><img src="assets/mark-light.png" alt=""><span>Blazer</span><img src="assets/mark-light.png" alt=""><span>Triko</span><img src="assets/mark-light.png" alt=""><span>Pantolon</span><img src="assets/mark-light.png" alt=""><span>Etek</span><img src="assets/mark-light.png" alt=""><span>Trençkot</span><img src="assets/mark-light.png" alt="">
+        <span>Elbise</span><img src="assets/mark-light.png" alt=""><span>Blazer</span><img src="assets/mark-light.png" alt=""><span>Triko</span><img src="assets/mark-light.png" alt=""><span>Pantolon</span><img src="assets/mark-light.png" alt=""><span>Etek</span><img src="assets/mark-light.png" alt=""><span>Trençkot</span><img src="assets/mark-light.png" alt="">
       </div>
     </div>
 
@@ -89,6 +99,7 @@
 
     <!-- MANİFESTO -->
     <section class="manifesto" id="manifesto">
+      <img class="manifesto__mark" src="assets/mark-light.png" alt="" aria-hidden="true">
       <p class="eyebrow eyebrow--light">02 — Hikaye</p>
       <p class="manifesto__text" id="manifestoText">FRENA, durmayı bilenler için. Her sezon değişen raflar yerine, dokusunu hissettiğin, dikişine güvendiğin ve yıllar sonra bile dolabından ilk çıkaracağın parçalar üretiyoruz. Az ama doğru. Hızlı değil, kalıcı.</p>
       <div class="stats">
@@ -119,35 +130,42 @@
 
     <!-- BÜLTEN -->
     <section class="newsletter" id="bulten">
+      <img class="newsletter__mark" src="assets/mark-dark.png" alt="" aria-hidden="true">
       <h2 class="newsletter__title">Yeni üretimden <em>ilk sen</em> haberdar ol.</h2>
       <form class="newsletter__form" id="newsletterForm">
         <input type="email" required placeholder="e-posta adresin" aria-label="E-posta">
-        <button type="submit" class="btn btn--accent">Katıl</button>
+        <button type="submit" class="btn btn--dark">Katıl</button>
       </form>
       <p class="newsletter__note" id="newsletterNote">Sınırlı adetli drop'lar önce bülten üyelerine açılır.</p>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="footer__cols">
-      <div>
-        <h4>Alışveriş</h4>
-        <a href="#koleksiyon">Tüm ürünler</a>
-        <a href="#" class="js-trendyol" target="_blank" rel="noopener">Trendyol mağazası</a>
-      </div>
-      <div>
-        <h4>Yardım</h4>
-        <a href="#">Beden rehberi</a>
-        <a href="#">Kargo & İade</a>
-        <a href="#">İletişim</a>
-      </div>
-      <div>
-        <h4>Takip et</h4>
-        <a href="#" class="js-instagram" target="_blank" rel="noopener">Instagram</a>
+    <div class="footer__top">
+      <img class="footer__logo" src="assets/logo-light.png" alt="Frena">
+      <div class="footer__cols">
+        <div>
+          <h4>Alışveriş</h4>
+          <a href="#koleksiyon">Tüm ürünler</a>
+          <a href="#" class="js-trendyol" target="_blank" rel="noopener">Trendyol mağazası</a>
+        </div>
+        <div>
+          <h4>Yardım</h4>
+          <a href="#">Beden rehberi</a>
+          <a href="#">Kargo & İade</a>
+          <a href="#">Mesafeli satış sözleşmesi</a>
+          <a href="#">KVKK</a>
+        </div>
+        <div>
+          <h4>Takip et</h4>
+          <a href="#" class="js-instagram" target="_blank" rel="noopener">Instagram</a>
+        </div>
       </div>
     </div>
-    <div class="footer__mark" aria-hidden="true">FRENA</div>
-    <p class="footer__copy">© <span id="year"></span> FRENA. Tüm hakları saklıdır.</p>
+    <div class="footer__bottom">
+      <p>© <span id="year"></span> FRENA. Tüm hakları saklıdır.</p>
+      <div class="pay-logos" aria-label="Ödeme yöntemleri"><span>VISA</span><span>MASTERCARD</span><span>TROY</span><span>iyzico</span></div>
+    </div>
   </footer>
 
   <!-- ÜRÜN DETAY -->
@@ -179,15 +197,16 @@
     <div class="drawer__items" id="cartItems"></div>
     <div class="drawer__foot">
       <div class="drawer__total"><span>Toplam</span><strong id="cartTotal">0 TL</strong></div>
-      <button class="btn btn--accent btn--block" id="checkoutBtn">Siparişi tamamla</button>
-      <p class="drawer__note">Sipariş, WhatsApp üzerinden onaylanır.</p>
+      <a class="btn btn--dark btn--block" id="checkoutBtn" href="odeme.html">Ödemeye geç <span class="btn__arrow">→</span></a>
+      <p class="drawer__note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Kartla güvenli ödeme · iyzico</p>
     </div>
   </aside>
 
   <div class="toast" id="toast"></div>
-  <div class="cursor" id="cursor" aria-hidden="true">Gör</div>
+  <div class="cursor" id="cursor" aria-hidden="true">incele</div>
 
   <script src="js/products.js"></script>
+  <script src="js/shop.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

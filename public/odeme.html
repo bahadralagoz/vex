@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ödeme — FRENA</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/mark-dark.png">
+</head>
+<body class="checkout-page">
+  <header class="co-nav">
+    <a href="index.html" class="nav__logo" aria-label="FRENA ana sayfa"><img class="mark" src="assets/mark-dark.png" alt=""><img class="word" src="assets/wordmark-dark.png" alt="Frena"></a>
+    <div class="co-steps"><span>Sepet</span>→<b>Teslimat</b>→<span>Ödeme</span></div>
+    <span class="co-secure">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      256-bit SSL güvenli ödeme
+    </span>
+  </header>
+
+  <main class="co">
+    <form id="checkoutForm" novalidate>
+      <h1>Teslimat <em>bilgileri</em></h1>
+      <p class="co__sub">Siparişini hazırlamamız için birkaç bilgiye ihtiyacımız var.</p>
+      <div class="form-error" id="formError" hidden></div>
+
+      <fieldset class="fieldset">
+        <legend>İletişim</legend>
+        <div class="fields">
+          <div class="field"><label for="name">Ad</label><input id="name" name="name" autocomplete="given-name" required><span class="hint"></span></div>
+          <div class="field"><label for="surname">Soyad</label><input id="surname" name="surname" autocomplete="family-name" required><span class="hint"></span></div>
+          <div class="field"><label for="email">E-posta</label><input id="email" name="email" type="email" autocomplete="email" required><span class="hint"></span></div>
+          <div class="field"><label for="phone">Telefon</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="05xx xxx xx xx" required><span class="hint"></span></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Adres</legend>
+        <div class="fields">
+          <div class="field"><label for="city">İl</label><select id="city" name="city" required><option value="">Seç</option></select><span class="hint"></span></div>
+          <div class="field"><label for="district">İlçe</label><input id="district" name="district" required><span class="hint"></span></div>
+          <div class="field field--full"><label for="address">Açık adres</label><textarea id="address" name="address" autocomplete="street-address" placeholder="Mahalle, sokak, bina ve daire no" required></textarea><span class="hint"></span></div>
+          <div class="field"><label for="zip">Posta kodu <small>(isteğe bağlı)</small></label><input id="zip" name="zip" inputmode="numeric" autocomplete="postal-code"><span class="hint"></span></div>
+          <div class="field"><label for="identityNumber">TC kimlik no <small>(fatura için, isteğe bağlı)</small></label><input id="identityNumber" name="identityNumber" inputmode="numeric" maxlength="11"><span class="hint"></span></div>
+          <div class="field field--full"><label for="note">Sipariş notu <small>(isteğe bağlı)</small></label><input id="note" name="note"></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Ödeme</legend>
+        <div class="pay-box">
+          <div class="pay-box__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div>
+          <p><strong>Kredi / banka kartı</strong>Kart bilgilerini iyzico'nun güvenli ödeme sayfasında gireceksin. 3D Secure ve taksit seçenekleri orada sunulur.</p>
+        </div>
+        <div class="field" id="consentField">
+          <label class="check"><input type="checkbox" id="consent" name="consent"> <span><a href="#">Ön bilgilendirme formu</a> ve <a href="#">mesafeli satış sözleşmesini</a> okudum, onaylıyorum.</span></label>
+          <span class="hint"></span>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn btn--dark btn--block" id="payBtn">Ödemeye geç <span class="btn__arrow">→</span></button>
+    </form>
+
+    <aside class="summary" aria-label="Sipariş özeti">
+      <h2>Siparişin</h2>
+      <div id="summaryItems"></div>
+      <div class="summary__rows">
+        <div><span>Ara toplam</span><span id="sumSubtotal">0 TL</span></div>
+        <div><span>Kargo</span><span id="sumShipping">0 TL</span></div>
+      </div>
+      <div class="summary__total"><span>Toplam</span><strong id="sumTotal">0 TL</strong></div>
+    </aside>
+  </main>
+
+  <script src="js/products.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

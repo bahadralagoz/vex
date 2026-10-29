@@ -1,0 +1,25 @@
+{
+  "name": "vex",
+  "version": "1.0.0",
+  "description": "FRENA kadın giyim markasının web sitesi. Saf HTML/CSS/JS ile yazıldı, kurulum veya derleme gerektirmez.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahadralagoz/vex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahadralagoz/vex/issues"
+  },
+  "homepage": "https://github.com/bahadralagoz/vex#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^4.22.3",
+    "iyzipay": "^2.0.71"
+  }
+}

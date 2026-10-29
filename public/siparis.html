@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sipariş — FRENA</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/mark-dark.png">
+</head>
+<body class="checkout-page">
+  <header class="co-nav">
+    <a href="index.html" class="nav__logo" aria-label="FRENA ana sayfa"><img class="mark" src="assets/mark-dark.png" alt=""><img class="word" src="assets/wordmark-dark.png" alt="Frena"></a>
+  </header>
+  <main class="result" id="result">
+    <div class="result__inner">
+      <div class="result__icon" id="rIcon">…</div>
+      <h1 id="rTitle">Kontrol ediliyor</h1>
+      <p id="rText"></p>
+      <a href="index.html" class="btn btn--dark" id="rBtn">Alışverişe dön</a>
+    </div>
+  </main>
+  <script>
+  (async () => {
+    const q = new URLSearchParams(location.search);
+    const durum = q.get("durum"), no = q.get("no");
+    const $ = id => document.getElementById(id);
+    const set = (icon, title, text) => { $("rIcon").textContent = icon; $("rTitle").innerHTML = title; $("rText").innerHTML = text; };
+    let order = null;
+    if (no) { try { const r = await fetch("/api/siparis/" + encodeURIComponent(no)); if (r.ok) order = await r.json(); } catch {} }
+    const fmt = n => new Intl.NumberFormat("tr-TR").format(n) + " TL";
+    if (durum === "basarili" && order && order.status === "paid") {
+      try { localStorage.removeItem("frena-cart"); } catch {}
+      set("✓", `Teşekkürler, <em>${order.firstName.replace(/[<>&]/g, "")}</em>`,
+        `Ödemen alındı. Sipariş numaran <code>${order.id}</code>, toplam ${fmt(order.total)}. Siparişin hazırlandığında e-posta ile haber vereceğiz.`);
+    } else if (durum === "basarisiz") {
+      document.getElementById("result").classList.add("result--fail");
+      set("!", "Ödeme <em>tamamlanamadı</em>", "Kartından çekim yapılmadı. Kart bilgilerini kontrol edip tekrar deneyebilir ya da farklı bir kart kullanabilirsin. Sepetin olduğu gibi duruyor.");
+      $("rBtn").textContent = "Tekrar dene"; $("rBtn").href = "odeme.html";
+    } else {
+      document.getElementById("result").classList.add("result--fail");
+      set("?", "Sipariş <em>bulunamadı</em>", "Ödeme durumunu doğrulayamadık. Kartından çekim yapıldıysa bize Instagram'dan yaz, hemen kontrol edelim.");
+    }
+  })();
+  </script>
+</body>
+</html>

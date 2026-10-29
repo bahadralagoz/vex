@@ -1,26 +1,9 @@
 (() => {
-  const PRODUCTS = window.FRENA_PRODUCTS;
+  const { PRODUCTS, CONFIG, fmt, byId, visual } = window.FrenaShop;
   const CATEGORIES = window.FRENA_CATEGORIES;
-  const CONFIG = window.FRENA_CONFIG;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-  const fmt = n => new Intl.NumberFormat("tr-TR").format(n) + " TL";
   const catLabel = id => (CATEGORIES.find(c => c.id === id) || {}).label || "";
-
-  // ---------- görsel yer tutucular (fotoğraf eklenene kadar) ----------
-  const SHAPES = {
-    elbise: "M78 20 Q100 34 122 20 L128 62 Q120 84 126 110 L168 236 Q100 252 32 236 L74 110 Q80 84 72 62 Z",
-    ust: "M70 40 Q100 56 130 40 L176 66 L162 112 L142 104 L144 214 Q100 224 56 214 L58 104 L38 112 L24 66 Z",
-    alt: "M58 30 L142 30 L150 236 L114 240 L100 92 L86 240 L50 236 Z",
-    ceket: "M66 26 L100 70 L134 26 L176 56 L170 236 L112 240 L100 92 L88 240 L30 236 L24 56 Z"
-  };
-  function visual(p, color) {
-    if (p.image) return `<img src="${p.image}" alt="${p.name}" loading="lazy">`;
-    const fill = color ? color.hex : p.colors[0].hex;
-    return `<div class="ph" style="background:radial-gradient(circle at 35% 25%, ${p.tone[0]}, ${p.tone[1]})">
-      <svg viewBox="0 0 200 260"><path d="${SHAPES[p.category] || SHAPES.ust}" fill="${fill}" stroke="rgba(0,0,0,.12)"/></svg>
-      <span class="ph__label">${p.name}</span></div>`;
-  }
 
   // ---------- harici linkler ----------
   $("#trendyolLink").href = CONFIG.trendyolStore;
@@ -101,9 +84,9 @@
   addEventListener("keydown", e => e.key === "Escape" && closePanels());
 
   // ---------- hızlı bakış ----------
-  let current = null, selColor = null, selSize = null;
+  let current = null, selColor = null, selSize = null, selImg = 0;
   function openQuick(p) {
-    current = p; selColor = p.colors[0]; selSize = null;
+    current = p; selColor = p.colors[0]; selSize = null; selImg = 0;
     $("#quickCat").textContent = catLabel(p.category);
     $("#quickName").textContent = p.name;
     $("#quickPrice").innerHTML = fmt(p.price) + (p.oldPrice ? `<s>${fmt(p.oldPrice)}</s>` : "");
@@ -114,7 +97,9 @@
   }
   function renderQuickOptions() {
     const p = current;
-    $("#quickMedia").innerHTML = visual(p, selColor);
+    const imgs = p.images || [];
+    $("#quickMedia").innerHTML = visual(p, selColor, { alt: false, index: selImg }) + (imgs.length > 1
+      ? `<div class="quick__thumbs">${imgs.map((src, i) => `<button data-img="${i}" class="${i === selImg ? "active" : ""}" aria-label="Görsel ${i + 1}"><img src="${src}" alt=""></button>`).join("")}</div>` : "");
     $("#quickColorName").textContent = selColor.name;
     $("#quickColors").innerHTML = p.colors.map((c, i) =>
       `<button class="swatch${c === selColor ? " active" : ""}" data-i="${i}" style="background:${c.hex}" aria-label="${c.name}"></button>`).join("");
@@ -123,6 +108,10 @@
     $("#addToCart").textContent = selSize ? `Sepete ekle — ${fmt(p.price)}` : "Beden seç";
     $("#addToCart").disabled = !selSize;
   }
+  $("#quickMedia").addEventListener("click", e => {
+    const b = e.target.closest("[data-img]"); if (!b) return;
+    selImg = +b.dataset.img; renderQuickOptions();
+  });
   $("#quickColors").addEventListener("click", e => {
     const b = e.target.closest(".swatch"); if (!b) return;
     selColor = current.colors[+b.dataset.i]; renderQuickOptions();
@@ -137,10 +126,8 @@
   });
 
   // ---------- sepet ----------
-  let cart = [];
-  try { cart = JSON.parse(localStorage.getItem("frena-cart")) || []; } catch { cart = []; }
-  cart = cart.filter(l => PRODUCTS.some(p => p.id === l.id));
-  const save = () => { try { localStorage.setItem("frena-cart", JSON.stringify(cart)); } catch {} };
+  let cart = window.FrenaShop.load();
+  const save = () => window.FrenaShop.save(cart);
 
   function addToCart(p, color, size) {
     const key = `${p.id}|${color.name}|${size}`;
@@ -152,21 +139,21 @@
   }
 
   function renderCart() {
-    const count = cart.reduce((a, l) => a + l.qty, 0);
-    const total = cart.reduce((a, l) => a + l.qty * PRODUCTS.find(p => p.id === l.id).price, 0);
+    const { count, subtotal } = window.FrenaShop.totals(cart);
     $("#cartCount").textContent = count;
-    $("#cartTotal").textContent = fmt(total);
-    $("#checkoutBtn").disabled = !count;
-    const left = CONFIG.freeShippingLimit - total;
+    $("#cartTotal").textContent = fmt(subtotal);
+    $("#checkoutBtn").classList.toggle("is-disabled", !count);
+    $("#checkoutBtn").setAttribute("aria-disabled", String(!count));
+    const left = CONFIG.freeShippingLimit - subtotal;
     $("#shipProgress").innerHTML = (left > 0
       ? `Ücretsiz kargoya <strong>${fmt(left)}</strong> kaldı`
       : `<strong>Kargo ücretsiz!</strong>`) +
-      `<div class="bar"><i style="width:${Math.min(100, total / CONFIG.freeShippingLimit * 100)}%"></i></div>`;
+      `<div class="bar"><i style="width:${Math.min(100, subtotal / CONFIG.freeShippingLimit * 100)}%"></i></div>`;
     $("#cartItems").innerHTML = count ? cart.map(l => {
-      const p = PRODUCTS.find(x => x.id === l.id);
+      const p = byId(l.id);
       const color = p.colors.find(c => c.name === l.color) || p.colors[0];
       return `<div class="line-item" data-key="${l.key}">
-        <div class="line-item__img">${visual(p, color)}</div>
+        <div class="line-item__img">${visual(p, color, { alt: false })}</div>
         <div><h4>${p.name}</h4><small>${l.color} · ${l.size}</small>
           <div class="qty"><button data-q="-1" aria-label="Azalt">−</button><span>${l.qty}</span><button data-q="1" aria-label="Arttır">+</button></div></div>
         <div class="line-item__right"><span>${fmt(p.price * l.qty)}</span><button class="remove">Kaldır</button></div>
@@ -182,15 +169,9 @@
     save(); renderCart();
   });
   $("#cartBtn").addEventListener("click", () => openPanel($("#cartDrawer")));
-  $("#checkoutBtn").addEventListener("click", () => {
-    const lines = cart.map(l => {
-      const p = PRODUCTS.find(x => x.id === l.id);
-      return `• ${p.name} — ${l.color} / ${l.size} x${l.qty} = ${fmt(p.price * l.qty)}`;
-    });
-    const total = cart.reduce((a, l) => a + l.qty * PRODUCTS.find(p => p.id === l.id).price, 0);
-    const msg = `Merhaba FRENA, sipariş vermek istiyorum:\n${lines.join("\n")}\nToplam: ${fmt(total)}`;
-    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
-  });
+  $("#checkoutBtn").addEventListener("click", e => { if (!cart.length) e.preventDefault(); });
+  // başka sekmede (ör. ödeme sayfası) sepet değişirse güncelle
+  addEventListener("storage", e => { if (e.key === "frena-cart") { cart = window.FrenaShop.load(); renderCart(); } });
   renderCart();
 
   // ---------- toast ----------

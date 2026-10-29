@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo Ödeme — FRENA</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/mark-dark.png">
+</head>
+<body class="checkout-page">
+  <header class="co-nav">
+    <a href="index.html" class="nav__logo" aria-label="FRENA ana sayfa"><img class="mark" src="assets/mark-dark.png" alt=""><img class="word" src="assets/wordmark-dark.png" alt="Frena"></a>
+  </header>
+  <main class="demo-pay">
+    <span class="demo-pay__badge">DEMO MODU</span>
+    <h1>Test ödemesi</h1>
+    <p class="co__sub">iyzico anahtarları henüz girilmediği için bu sayfa iyzico'nun ödeme ekranının yerini tutuyor. Gerçek bir kart çekimi yapılmaz. Anahtarlar girildiğinde müşteri bu sayfa yerine iyzico'ya yönlendirilir.</p>
+    <p><strong>Tutar: <span id="amt">…</span></strong></p>
+    <div class="fields">
+      <div class="field field--full"><label for="cardNo">Kart numarası (örnek)</label><input id="cardNo" value="5528 7900 0000 0008" disabled></div>
+    </div>
+    <div class="demo-pay__actions">
+      <button class="btn btn--dark" data-sonuc="basarili">Ödemeyi başarılı tamamla</button>
+      <button class="btn btn--ghost" data-sonuc="basarisiz">Ödemeyi başarısız yap</button>
+    </div>
+  </main>
+  <script>
+  (async () => {
+    const no = new URLSearchParams(location.search).get("siparis");
+    const r = await fetch("/api/siparis/" + encodeURIComponent(no)).catch(() => null);
+    const o = r && r.ok ? await r.json() : null;
+    document.getElementById("amt").textContent = o ? new Intl.NumberFormat("tr-TR").format(o.total) + " TL" : "sipariş bulunamadı";
+    document.querySelectorAll("[data-sonuc]").forEach(b => b.addEventListener("click", async () => {
+      const res = await fetch("/api/demo/odeme", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ siparis: no, sonuc: b.dataset.sonuc }) });
+      const d = await res.json().catch(() => ({}));
+      location.href = d.redirect || "/siparis.html?durum=hata";
+    }));
+  })();
+  </script>
+</body>
+</html>
